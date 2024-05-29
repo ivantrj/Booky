@@ -12,9 +12,28 @@ import SwiftData
 class Book {
     var name: String
     var date: Date
+    var status: Status
     
-    init(name: String, date: Date) {
+    init(name: String, date: Date, status: Status = .wantToRead) {
         self.name = name
         self.date = date
+        self.status = status
+    }
+}
+
+enum Status: Int, Codable, Identifiable, CaseIterable {
+    case wantToRead, inProgress, completed
+    var id: Self {
+        self
+    }
+    var descr: String {
+        switch self {
+        case .wantToRead:
+            "Want to Read"
+        case .inProgress:
+            "Reading"
+        case .completed:
+            "Completed"
+        }
     }
 }

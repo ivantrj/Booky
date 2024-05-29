@@ -67,6 +67,7 @@ struct BookCell: View {
                 .frame(width: 70, alignment: .leading)
             Text(book.name)
             Spacer()
+            Text(book.status.descr)
         }
     }
 }
@@ -77,12 +78,19 @@ struct AddBookSheet: View {
     
     @State private var name: String = ""
     @State private var date: Date = .now
+    @State private var status: Status = .wantToRead
     
     var body: some View {
         NavigationStack {
             Form {
                 TextField("Book Name", text: $name)
                 DatePicker("Date", selection: $date, displayedComponents: .date)
+                Picker("Status", selection: $status) {
+                    ForEach(Status.allCases, id: \.self) { status in
+                        Text(status.descr)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
             }
             .navigationTitle("New Book")
             .navigationBarTitleDisplayMode(.large)
@@ -93,7 +101,7 @@ struct AddBookSheet: View {
                 
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button("Save") {
-                        let book = Book(name: name, date: date)
+                        let book = Book(name: name, date: date, status: status)
                         context.insert(book)
                         dismiss()
                     }
@@ -112,6 +120,12 @@ struct UpdateBookSheet: View {
             Form {
                 TextField("Book Name", text: $book.name)
                 DatePicker("Date", selection: $book.date, displayedComponents: .date)
+                Picker("Status", selection: $book.status) {
+                    ForEach(Status.allCases, id: \.self) { status in
+                        Text(status.descr)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
             }
             .navigationTitle("New Book")
             .navigationBarTitleDisplayMode(.large)
