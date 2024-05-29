@@ -18,7 +18,7 @@ struct InboxView: View {
         NavigationStack {
             List {
                 ForEach(books) { book in
-                    ExpenseCell(book: book)
+                    BookCell(book: book)
                         .onTapGesture {
                             bookToEdit = book
                         }
@@ -31,9 +31,9 @@ struct InboxView: View {
             }
             .navigationTitle("Books")
             .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $isShowingItemSheet) { AddExpenseSheet() }
+            .sheet(isPresented: $isShowingItemSheet) { AddBookSheet() }
             .sheet(item: $bookToEdit) { book in
-                UpdateExpenseSheet(book: book)
+                UpdateBookSheet(book: book)
             }
             .toolbar {
                 if !books.isEmpty {
@@ -58,7 +58,7 @@ struct InboxView: View {
     }
 }
 
-struct ExpenseCell: View {
+struct BookCell: View {
     let book: Book
     
     var body: some View {
@@ -71,7 +71,7 @@ struct ExpenseCell: View {
     }
 }
 
-struct AddExpenseSheet: View {
+struct AddBookSheet: View {
     @Environment(\.modelContext) var context
     @Environment(\.dismiss) private var dismiss
     
@@ -103,7 +103,7 @@ struct AddExpenseSheet: View {
     }
 }
 
-struct UpdateExpenseSheet: View {
+struct UpdateBookSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var book: Book
     
