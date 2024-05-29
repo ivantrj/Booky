@@ -45,7 +45,7 @@ struct InboxView: View {
             .overlay {
                 if books.isEmpty {
                     ContentUnavailableView(label: {
-                        Label("No books", systemImage: "list.bullet.rectangle.portrait")
+                        Label("No books", systemImage: "books.vertical")
                     }, description: {
                         Text("Start adding books to see your reading list.")
                     }, actions: {
