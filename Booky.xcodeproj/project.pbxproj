@@ -11,6 +11,11 @@
 		2CA0560D2C0618DA000579B6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0560C2C0618DA000579B6 /* ContentView.swift */; };
 		2CA0560F2C0618DB000579B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CA0560E2C0618DB000579B6 /* Assets.xcassets */; };
 		2CA056122C0618DB000579B6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CA056112C0618DB000579B6 /* Preview Assets.xcassets */; };
+		2CA0561B2C06195E000579B6 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0561A2C06195E000579B6 /* InboxView.swift */; };
+		2CA0561D2C061973000579B6 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0561C2C061973000579B6 /* LibraryView.swift */; };
+		2CA0561F2C061984000579B6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0561E2C061984000579B6 /* SettingsView.swift */; };
+		2CA056212C061A03000579B6 /* EditBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA056202C061A03000579B6 /* EditBookView.swift */; };
+		2CCD0CD32C07721B00F7DE1C /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCD0CD22C07721B00F7DE1C /* Book.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +24,11 @@
 		2CA0560C2C0618DA000579B6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2CA0560E2C0618DB000579B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CA056112C0618DB000579B6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2CA0561A2C06195E000579B6 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
+		2CA0561C2C061973000579B6 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		2CA0561E2C061984000579B6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2CA056202C061A03000579B6 /* EditBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookView.swift; sourceTree = "<group>"; };
+		2CCD0CD22C07721B00F7DE1C /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +63,11 @@
 			children = (
 				2CA0560A2C0618DA000579B6 /* BookyApp.swift */,
 				2CA0560C2C0618DA000579B6 /* ContentView.swift */,
+				2CA056202C061A03000579B6 /* EditBookView.swift */,
+				2CA0561C2C061973000579B6 /* LibraryView.swift */,
+				2CA0561A2C06195E000579B6 /* InboxView.swift */,
+				2CA0561E2C061984000579B6 /* SettingsView.swift */,
+				2CCD0CD22C07721B00F7DE1C /* Book.swift */,
 				2CA0560E2C0618DB000579B6 /* Assets.xcassets */,
 				2CA056102C0618DB000579B6 /* Preview Content */,
 			);
@@ -138,7 +153,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CA0560D2C0618DA000579B6 /* ContentView.swift in Sources */,
+				2CA0561B2C06195E000579B6 /* InboxView.swift in Sources */,
+				2CCD0CD32C07721B00F7DE1C /* Book.swift in Sources */,
 				2CA0560B2C0618DA000579B6 /* BookyApp.swift in Sources */,
+				2CA0561F2C061984000579B6 /* SettingsView.swift in Sources */,
+				2CA0561D2C061973000579B6 /* LibraryView.swift in Sources */,
+				2CA056212C061A03000579B6 /* EditBookView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
