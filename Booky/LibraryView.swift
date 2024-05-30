@@ -28,20 +28,7 @@ struct LibraryView: View {
                         GridItem(.adaptive(minimum: 150))
                     ], spacing: 20) {
                         ForEach(books, id: \.self.id) { book in
-                            ZStack {
-                                Color(.secondarySystemBackground)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                                VStack {
-                                    Image(systemName: "book")
-                                        .font(.title)
-                                    Text(book.name)
-                                        .font(.callout)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.top, 8)
-                                }
-                                .padding()
-                            }
+                            BookGridCard(book: book)
                         }
                     }
                     .padding()
@@ -51,6 +38,27 @@ struct LibraryView: View {
             }
             .navigationTitle("Library")
             .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
+
+struct BookGridCard: View {
+    var book: Book
+    
+    var body: some View {
+        ZStack {
+            Color(.secondarySystemBackground)
+                .cornerRadius(10)
+                .shadow(radius: 5)
+            VStack {
+                Image(systemName: "book")
+                    .font(.title)
+                Text(book.name)
+                    .font(.callout)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 8)
+            }
+            .padding()
         }
     }
 }
