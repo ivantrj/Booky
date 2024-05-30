@@ -14,6 +14,16 @@ struct InboxView: View {
     @Query private var books: [Book]
     @State private var bookToEdit: Book?
     
+    
+//    init() {
+//        let type = Status.wantToRead.rawValue
+//
+//        let filter = #Predicate<Book> { book in
+//            book.status.rawValue == type
+//        }
+//        _books = Query(filter: filter, sort: \.type)
+//    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -62,12 +72,42 @@ struct BookCell: View {
     let book: Book
     
     var body: some View {
-        HStack {
-            Text(book.date, format: .dateTime.month(.abbreviated).day())
-                .frame(width: 70, alignment: .leading)
-            Text(book.name)
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(book.date, style: .date)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                Text(book.name)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+            }
+            
             Spacer()
+            
             Text(book.status.descr)
+                .font(.footnote)
+                .foregroundColor(book.status.color)
+                .padding(.vertical, 8)
+                .padding(.horizontal, 16)
+                .background(book.status.color.opacity(0.2))
+                .clipShape(Capsule())
+        }
+        .cornerRadius(10)
+    }
+}
+
+extension Status {
+    var color: Color {
+        switch self {
+        case .wantToRead:
+            return .orange
+        case .inProgress:
+            return .green
+        case .completed:
+            return .purple
         }
     }
 }
