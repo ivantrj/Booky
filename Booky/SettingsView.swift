@@ -8,10 +8,25 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @State private var showingAboutAuthor = false
+    
     var body: some View {
         NavigationView {
-            Text("Settings")
-                .navigationBarTitle("Settings")
+            Form {
+//                Section(header: Text("Goals")) {
+//                    NavigationLink("Reading Goals", destination: ReadingGoalsView())
+//                }
+                
+                Section(header: Text("About")) {
+                    Button("About the Author") {
+                        showingAboutAuthor.toggle()
+                    }
+                }
+            }
+            .navigationTitle("Settings")
+            .sheet(isPresented: $showingAboutAuthor) {
+                AboutAuthorView()
+            }
         }
     }
 }
@@ -19,3 +34,5 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
 }
+
+
