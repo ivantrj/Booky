@@ -11,24 +11,11 @@ import SwiftData
 struct InboxView: View {
     @Environment(\.modelContext) var context
     @State private var isShowingItemSheet = false
-    @Query private var books: [Book]
-//    @Query private var inboxBooks: [Book]
+    @Query(filter: #Predicate<Book> { book in
+        book.status == "want to read"
+    }) private var books: [Book]
     @State private var bookToEdit: Book?
     
-//        @Query(filter: #Predicate<Book> { book in
-//            book.status.descr == "Want to Read"
-//        }) var books: [Book]
-    
-//    init() {
-//        let wanttoread = Status.wantToRead.rawValue
-//
-//        let filter = #Predicate<Book> { book in
-//            book.status.rawValue == wanttoread
-//        }
-//
-//        _inboxBooks = Query(filter: filter)
-//    }
-//    
     var body: some View {
         NavigationStack {
             List {
@@ -91,29 +78,8 @@ struct BookCell: View {
             }
             
             Spacer()
-            
-            Text(book.status.descr)
-                .font(.footnote)
-                .foregroundColor(book.status.color)
-                .padding(.vertical, 8)
-                .padding(.horizontal, 16)
-                .background(book.status.color.opacity(0.2))
-                .clipShape(Capsule())
         }
         .cornerRadius(10)
-    }
-}
-
-extension Status {
-    var color: Color {
-        switch self {
-        case .wantToRead:
-            return .orange
-        case .inProgress:
-            return .green
-        case .completed:
-            return .purple
-        }
     }
 }
 
@@ -123,7 +89,7 @@ struct AddBookSheet: View {
     
     @State private var name: String = ""
     @State private var date: Date = .now
-    @State private var status: Status = .wantToRead
+    @State private var status = Book.wantToRead
     
     var body: some View {
         NavigationStack {
@@ -131,8 +97,8 @@ struct AddBookSheet: View {
                 TextField("Book Name", text: $name)
                 DatePicker("Date", selection: $date, displayedComponents: .date)
                 Picker("Status", selection: $status) {
-                    ForEach(Status.allCases, id: \.self) { status in
-                        Text(status.descr)
+                    ForEach(Book.allStatuses, id: \.self) { status in
+                        Text(status)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
@@ -166,8 +132,8 @@ struct UpdateBookSheet: View {
                 TextField("Book Name", text: $book.name)
                 DatePicker("Date", selection: $book.date, displayedComponents: .date)
                 Picker("Status", selection: $book.status) {
-                    ForEach(Status.allCases, id: \.self) { status in
-                        Text(status.descr)
+                    ForEach(Book.allStatuses, id: \.self) { status in
+                        Text(status)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())

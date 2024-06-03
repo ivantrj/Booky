@@ -9,19 +9,15 @@ import SwiftUI
 import SwiftData
 
 struct LibraryView: View {
-    @State private var status: Status = .inProgress
-    @State private var statuses: [Status] = [.inProgress, .completed]
+    @State private var status = Book.reading
     @Query private var books: [Book]
-    @Query(filter: #Predicate<Book> { book in
-        book.status.descr == "Reading"
-    }) var readingBooks: [Book]
     
     var body: some View {
         NavigationStack {
             VStack {
                 Picker("Status", selection: $status) {
-                    ForEach(statuses, id: \.self) { status in
-                        Text(status.descr)
+                    ForEach(Book.libraryStatuses, id: \.self) { status in
+                        Text(status)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
@@ -31,7 +27,7 @@ struct LibraryView: View {
                     LazyVGrid(columns: [
                         GridItem(.adaptive(minimum: 150))
                     ], spacing: 20) {
-                        ForEach(readingBooks, id: \.self.id) { book in
+                        ForEach(filteredBooks, id: \.self.id) { book in
                             BookGridCard(book: book)
                         }
                     }
@@ -44,6 +40,25 @@ struct LibraryView: View {
             .navigationBarTitleDisplayMode(.large)
         }
     }
+    
+    private var filteredBooks: [Book] {
+            switch status {
+            case Book.reading:
+                return books.filter { book in
+                    book.status == "reading"
+                }
+            case Book.wantToRead:
+                return books.filter { book in
+                    book.status == "wantToRead"
+                }
+            case Book.read:
+                return books.filter { book in
+                    book.status == "read"
+                }
+            default:
+                return books
+            }
+        }
 }
 
 struct BookGridCard: View {
