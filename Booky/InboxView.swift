@@ -12,18 +12,23 @@ struct InboxView: View {
     @Environment(\.modelContext) var context
     @State private var isShowingItemSheet = false
     @Query private var books: [Book]
+//    @Query private var inboxBooks: [Book]
     @State private var bookToEdit: Book?
     
+//        @Query(filter: #Predicate<Book> { book in
+//            book.status.descr == "Want to Read"
+//        }) var books: [Book]
     
 //    init() {
-//        let type = Status.wantToRead.rawValue
+//        let wanttoread = Status.wantToRead.rawValue
 //
 //        let filter = #Predicate<Book> { book in
-//            book.status.rawValue == type
+//            book.status.rawValue == wanttoread
 //        }
-//        _books = Query(filter: filter, sort: \.type)
+//
+//        _inboxBooks = Query(filter: filter)
 //    }
-    
+//    
     var body: some View {
         NavigationStack {
             List {

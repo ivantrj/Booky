@@ -10,13 +10,17 @@ import SwiftData
 
 struct LibraryView: View {
     @State private var status: Status = .inProgress
+    @State private var statuses: [Status] = [.inProgress, .completed]
     @Query private var books: [Book]
+    @Query(filter: #Predicate<Book> { book in
+        book.status.descr == "Reading"
+    }) var readingBooks: [Book]
     
     var body: some View {
         NavigationStack {
             VStack {
                 Picker("Status", selection: $status) {
-                    ForEach(Status.allCases, id: \.self) { status in
+                    ForEach(statuses, id: \.self) { status in
                         Text(status.descr)
                     }
                 }
@@ -27,7 +31,7 @@ struct LibraryView: View {
                     LazyVGrid(columns: [
                         GridItem(.adaptive(minimum: 150))
                     ], spacing: 20) {
-                        ForEach(books, id: \.self.id) { book in
+                        ForEach(readingBooks, id: \.self.id) { book in
                             BookGridCard(book: book)
                         }
                     }
