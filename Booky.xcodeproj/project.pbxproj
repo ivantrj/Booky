@@ -17,6 +17,7 @@
 		2CCD0CD32C07721B00F7DE1C /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCD0CD22C07721B00F7DE1C /* Book.swift */; };
 		2CCD0CD52C0DFD4200F7DE1C /* AboutAuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCD0CD42C0DFD4200F7DE1C /* AboutAuthorView.swift */; };
 		2CCD0CD72C0DFD5A00F7DE1C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCD0CD62C0DFD5A00F7DE1C /* Constants.swift */; };
+		2CCD0CD92C0EE83800F7DE1C /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCD0CD82C0EE83800F7DE1C /* PremiumView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		2CCD0CD22C07721B00F7DE1C /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		2CCD0CD42C0DFD4200F7DE1C /* AboutAuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAuthorView.swift; sourceTree = "<group>"; };
 		2CCD0CD62C0DFD5A00F7DE1C /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2CCD0CD82C0EE83800F7DE1C /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				2CA0560C2C0618DA000579B6 /* ContentView.swift */,
 				2CA0561A2C06195E000579B6 /* InboxView.swift */,
 				2CA0561C2C061973000579B6 /* LibraryView.swift */,
+				2CCD0CD82C0EE83800F7DE1C /* PremiumView.swift */,
 				2CA0561E2C061984000579B6 /* SettingsView.swift */,
 				2CCD0CD42C0DFD4200F7DE1C /* AboutAuthorView.swift */,
 				2CCD0CD22C07721B00F7DE1C /* Book.swift */,
@@ -157,6 +160,7 @@
 			files = (
 				2CA0560D2C0618DA000579B6 /* ContentView.swift in Sources */,
 				2CA0561B2C06195E000579B6 /* InboxView.swift in Sources */,
+				2CCD0CD92C0EE83800F7DE1C /* PremiumView.swift in Sources */,
 				2CCD0CD32C07721B00F7DE1C /* Book.swift in Sources */,
 				2CA0560B2C0618DA000579B6 /* BookyApp.swift in Sources */,
 				2CA0561F2C061984000579B6 /* SettingsView.swift in Sources */,

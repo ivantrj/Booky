@@ -11,7 +11,9 @@ import SwiftData
 struct LibraryView: View {
     @State private var status = Book.reading
     @Query private var books: [Book]
-    
+    @State private var isShowingSettings = false
+    @State private var isShowingPremium = false
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -22,7 +24,7 @@ struct LibraryView: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
-                
+
                 ScrollView {
                     LazyVGrid(columns: [
                         GridItem(.adaptive(minimum: 150))
@@ -33,28 +35,46 @@ struct LibraryView: View {
                     }
                     .padding()
                 }
-                
+
                 Spacer()
             }
             .navigationTitle("Library")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        isShowingPremium = true
+                    }) {
+                        Image(systemName: "gift.fill")
+                            .foregroundColor(.accentColor)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isShowingSettings = true
+                    }) {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.accentColor)
+                    }
+                }
+            }
+            .sheet(isPresented: $isShowingSettings) {
+                SettingsView()
+            }
+            .sheet(isPresented: $isShowingPremium) {
+                PremiumView()
+            }
         }
     }
-    
+
     private var filteredBooks: [Book] {
         switch status {
         case Book.reading:
-            return books.filter { book in
-                book.status == "reading"
-            }
+            return books.filter { $0.status == "reading" }
         case Book.wantToRead:
-            return books.filter { book in
-                book.status == "wantToRead"
-            }
+            return books.filter { $0.status == "want to read" }
         case Book.read:
-            return books.filter { book in
-                book.status == "read"
-            }
+            return books.filter { $0.status == "read" }
         default:
             return books
         }

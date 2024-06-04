@@ -21,12 +21,6 @@ struct ContentView: View {
                     Image(systemName: "book")
                     Text("Library")
                 }
-
-            SettingsView()
-                .tabItem {
-                    Image(systemName: "gearshape")
-                    Text("Settings")
-                }
         }
        
     }

@@ -10,57 +10,87 @@ import SwiftData
 
 struct InboxView: View {
     @Environment(\.modelContext) var context
-    @State private var isShowingItemSheet = false
+    @State private var isShowingAddBookSheet = false
     @Query(filter: #Predicate<Book> { book in
         book.status == "want to read"
     }) private var books: [Book]
     @State private var bookToEdit: Book?
     
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(books) { book in
-                    BookCell(book: book)
-                        .onTapGesture {
-                            bookToEdit = book
+        NavigationView {
+            ZStack {
+                Color("BackgroundColor")
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    List {
+                        ForEach(books) { book in
+                            BookCellView(book: book)
+                                .onTapGesture {
+                                    bookToEdit = book
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(action: {
+                                        context.delete(book)
+                                    }) {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                    .tint(.red)
+                                }
                         }
-                }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        context.delete(books[index])
+                        .onDelete { indexSet in
+                            for index in indexSet {
+                                context.delete(books[index])
+                            }
+                        }
                     }
+                    .listStyle(PlainListStyle())
+                    .background(Color("BackgroundColor"))
+                    .cornerRadius(20)
+                    .padding(.top)
+                    
+                    Spacer()
+                    
+                    if books.isEmpty {
+                        ContentUnavailableView {
+                            Label("No books", systemImage: "books.vertical")
+                            Text("Start adding books to see your reading list.")
+                            Button("Add Book") {
+                                isShowingAddBookSheet = true
+                            }
+                            .buttonStyle(AddBookButtonStyle())
+                        }
+                    }
+                    
+                    Spacer()
                 }
             }
             .navigationTitle("Books")
-            .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $isShowingItemSheet) { AddBookSheet() }
-            .sheet(item: $bookToEdit) { book in
-                UpdateBookSheet(book: book)
-            }
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if !books.isEmpty {
-                    Button("Add Book", systemImage: "plus") {
-                        isShowingItemSheet = true
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isShowingAddBookSheet = true
+                    }) {
+                        Image(systemName: "plus")
+                            .foregroundColor(.white)
+                            .padding(8)
+                            .background(Color.accentColor)
+                            .clipShape(Circle())
                     }
                 }
             }
-            .overlay {
-                if books.isEmpty {
-                    ContentUnavailableView(label: {
-                        Label("No books", systemImage: "books.vertical")
-                    }, description: {
-                        Text("Start adding books to see your reading list.")
-                    }, actions: {
-                        Button("Add Book") { isShowingItemSheet = true }
-                    })
-                    .offset(y: -60)
-                }
+            .sheet(isPresented: $isShowingAddBookSheet) {
+                AddBookSheetView()
+            }
+            .sheet(item: $bookToEdit) { book in
+                UpdateBookSheetView(book: book)
             }
         }
     }
 }
 
-struct BookCell: View {
+struct BookCellView: View {
     let book: Book
     
     var body: some View {
@@ -79,11 +109,13 @@ struct BookCell: View {
             
             Spacer()
         }
+        .padding(.vertical, 8)
+        .background(Color("CellBackgroundColor"))
         .cornerRadius(10)
     }
 }
 
-struct AddBookSheet: View {
+struct AddBookSheetView: View {
     @Environment(\.modelContext) var context
     @Environment(\.dismiss) private var dismiss
     
@@ -92,7 +124,7 @@ struct AddBookSheet: View {
     @State private var status = Book.wantToRead
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             Form {
                 TextField("Book Name", text: $name)
                 DatePicker("Date", selection: $date, displayedComponents: .date)
@@ -104,13 +136,15 @@ struct AddBookSheet: View {
                 .pickerStyle(SegmentedPickerStyle())
             }
             .navigationTitle("New Book")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    Button("Cancel") { dismiss() }
+                ToolbarItemGroup(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
                 }
                 
-                ToolbarItemGroup(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button("Save") {
                         let book = Book(name: name, date: date, status: status)
                         context.insert(book)
@@ -122,12 +156,12 @@ struct AddBookSheet: View {
     }
 }
 
-struct UpdateBookSheet: View {
+struct UpdateBookSheetView: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var book: Book
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             Form {
                 TextField("Book Name", text: $book.name)
                 DatePicker("Date", selection: $book.date, displayedComponents: .date)
@@ -138,13 +172,44 @@ struct UpdateBookSheet: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
-            .navigationTitle("New Book")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("Update Book")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    Button("Done") { dismiss() }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Done") {
+                        dismiss()
+                    }
                 }
             }
         }
+    }
+}
+
+struct ContentUnavailableView<Content: View>: View {
+    let content: Content
+    
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            content
+        }
+        .padding()
+        .background(Color("CellBackgroundColor"))
+        .cornerRadius(10)
+        .padding(.horizontal)
+    }
+}
+
+struct AddBookButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(Color.accentColor)
+            .cornerRadius(10)
     }
 }
