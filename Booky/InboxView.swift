@@ -51,24 +51,6 @@ struct InboxView: View {
                     .background(Color("BackgroundColor"))
                     .cornerRadius(20)
                     .padding(.top)
-                    
-                    if books.isEmpty {
-                        VStack {
-                            ContentUnavailableView {
-                                Image(systemName: "books.vertical")
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                Text("Start adding books to see your reading list.")
-                                Button("Add Book") {
-                                    isShowingAddBookSheet = true
-                                }
-                                .buttonStyle(AddBookButtonStyle())
-                            }
-                            .offset(y: -60)
-                            Spacer()
-                        }
-                    }
-                    
                 }
             }
             .navigationTitle("Books")
@@ -102,6 +84,23 @@ struct InboxView: View {
             }
             .sheet(isPresented: $isShowingPremium) {
                 PremiumView()
+            }
+            .overlay {
+                if books.isEmpty {
+                    ContentUnavailableView(label: {
+                        Label("No books", systemImage: "books.vertical")
+                    }, description: {
+                        Text("Start adding books to see your reading list.")
+                    }, actions: {
+                        Button("Add Book") { isShowingAddBookSheet = true }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(Color.accentColor)
+                            .cornerRadius(10)
+                    })
+                    .offset(y: -60)
+                }
             }
         }
     }
@@ -199,34 +198,5 @@ struct UpdateBookSheetView: View {
                 }
             }
         }
-    }
-}
-
-struct ContentUnavailableView<Content: View>: View {
-    let content: Content
-    
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            content
-        }
-        .padding()
-        .background(Color("CellBackgroundColor"))
-        .cornerRadius(10)
-        .padding(.horizontal)
-    }
-}
-
-struct AddBookButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundColor(.white)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(Color.accentColor)
-            .cornerRadius(10)
     }
 }
