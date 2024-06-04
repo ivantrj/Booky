@@ -11,6 +11,9 @@ import SwiftData
 struct InboxView: View {
     @Environment(\.modelContext) var context
     @State private var isShowingAddBookSheet = false
+    @State private var isShowingSettings = false
+    @State private var isShowingPremium = false
+    
     @Query(filter: #Predicate<Book> { book in
         book.status == "want to read"
     }) private var books: [Book]
@@ -49,34 +52,42 @@ struct InboxView: View {
                     .cornerRadius(20)
                     .padding(.top)
                     
-                    Spacer()
-                    
                     if books.isEmpty {
-                        ContentUnavailableView {
-                            Label("No books", systemImage: "books.vertical")
-                            Text("Start adding books to see your reading list.")
-                            Button("Add Book") {
-                                isShowingAddBookSheet = true
+                        VStack {
+                            ContentUnavailableView {
+                                Image(systemName: "books.vertical")
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                Text("Start adding books to see your reading list.")
+                                Button("Add Book") {
+                                    isShowingAddBookSheet = true
+                                }
+                                .buttonStyle(AddBookButtonStyle())
                             }
-                            .buttonStyle(AddBookButtonStyle())
+                            .offset(y: -60)
+                            Spacer()
                         }
                     }
                     
-                    Spacer()
                 }
             }
             .navigationTitle("Books")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        isShowingPremium = true
+                    }) {
+                        Image(systemName: "gift.fill")
+                            .foregroundColor(.accentColor)
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        isShowingAddBookSheet = true
+                        isShowingSettings = true
                     }) {
-                        Image(systemName: "plus")
-                            .foregroundColor(.white)
-                            .padding(8)
-                            .background(Color.accentColor)
-                            .clipShape(Circle())
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.accentColor)
                     }
                 }
             }
@@ -85,6 +96,12 @@ struct InboxView: View {
             }
             .sheet(item: $bookToEdit) { book in
                 UpdateBookSheetView(book: book)
+            }
+            .sheet(isPresented: $isShowingSettings) {
+                SettingsView()
+            }
+            .sheet(isPresented: $isShowingPremium) {
+                PremiumView()
             }
         }
     }
