@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import RevenueCatUI
 
 struct InboxView: View {
     @Environment(\.modelContext) var context
@@ -83,7 +84,7 @@ struct InboxView: View {
                 SettingsView()
             }
             .sheet(isPresented: $isShowingPremium) {
-                PremiumView()
+                PaywallView()
             }
             .overlay {
                 if books.isEmpty {

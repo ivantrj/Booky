@@ -28,8 +28,9 @@ struct PremiumView: View {
                     .foregroundColor(.secondary)
 
                 VStack(spacing: 16) {
-                    PremiumOptionView(title: "Annual Plan", price: "17.99", period: "One-Time Payment")
+                    PremiumOptionView(title: "Annual Plan", price: "17.99", period: "Yearly")
                     PremiumOptionView(title: "Monthly Plan", price: "1.99", period: "Per Month")
+                    PremiumOptionView(title: "Lifetime Purchase", price: "27.99", period: "One-Time Payment")
                 }
 
                 Spacer()

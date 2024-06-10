@@ -7,6 +7,8 @@
 
 import SwiftUI
 import SwiftData
+import RevenueCat
+import RevenueCatUI
 
 @main
 struct BookyApp: App {
@@ -18,11 +20,14 @@ struct BookyApp: App {
         } catch {
             fatalError("Could not initialize ModelContainer")
         }
+        
+        
     }
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+//                .presentPaywallIfNeeded(requiredEntitlementIdentifier: "premium")
         }
         .modelContainer(modelContainer)
     }

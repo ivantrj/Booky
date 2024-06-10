@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import RevenueCatUI
 
 struct LibraryView: View {
     @State private var status = Book.reading
@@ -62,7 +63,7 @@ struct LibraryView: View {
                 SettingsView()
             }
             .sheet(isPresented: $isShowingPremium) {
-                PremiumView()
+                PaywallView()
             }
         }
     }
@@ -87,55 +88,78 @@ struct BookGridCard: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                .cornerRadius(15)
-                .shadow(radius: 5)
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color("CardBackgroundColor"))
+                .shadow(color: Color.black.opacity(0.2), radius: 8, x: 0, y: 4)
             
-            VStack(spacing: 8) {
-                if let imageUrl = book.imageUrl, let url = URL(string: imageUrl) {
-                    AsyncImage(url: url) { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 150)
-                                .cornerRadius(10)
-                        } else {
-                            ProgressView()
-                                .frame(height: 150)
+            VStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color("ImageBackgroundColor"))
+                        .frame(height: 180)
+                    
+                    if let imageUrl = book.imageUrl, let url = URL(string: imageUrl) {
+                        AsyncImage(url: url) { phase in
+                            if let image = phase.image {
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: 140, maxHeight: 180)
+                                    .cornerRadius(12)
+                            } else if phase.error != nil {
+                                Image(systemName: "book.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 100, maxHeight: 140)
+                                    .foregroundColor(.secondary)
+                            } else {
+                                ProgressView()
+                                    .frame(maxWidth: 100, maxHeight: 140)
+                            }
                         }
+                    } else {
+                        Image(systemName: "book.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 100, maxHeight: 140)
+                            .foregroundColor(.secondary)
                     }
-                } else {
-                    Image(systemName: "book.circle")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 150)
-                        .foregroundColor(.white)
                 }
                 
-                Text(book.name)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
-                
-                if let author = book.author {
-                    Text("by \(author)")
-                        .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.8))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(book.name)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                    
+                    if let author = book.author {
+                        Text("by \(author)")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                 }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
             }
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .onTapGesture {
             isShowingDetails = true
         }
         .sheet(isPresented: $isShowingDetails) {
             BookDetailsView(book: book)
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.blue, lineWidth: 3)
+        )
     }
 }
 
 struct BookDetailsView: View {
+//    @Environment(\.managedObjectContext) private var viewContext
     @State var book: Book
     @State private var rating: Int = 0
     @Environment(\.presentationMode) var presentationMode
@@ -143,95 +167,81 @@ struct BookDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                HStack {
+                ZStack(alignment: .topTrailing) {
+                    if let imageUrl = book.imageUrl, let url = URL(string: imageUrl) {
+                        AsyncImage(url: url) { phase in
+                            if let image = phase.image {
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity, maxHeight: 300)
+                                    .clipped()
+                            } else if phase.error != nil {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: .infinity, maxHeight: 300)
+                                    .foregroundColor(.red)
+                            } else {
+                                ProgressView()
+                                    .frame(maxWidth: .infinity, maxHeight: 300)
+                            }
+                        }
+                    } else {
+                        Image(systemName: "book.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity, maxHeight: 300)
+                            .foregroundColor(.secondary)
+                    }
+                    
                     Button(action: {
+//                        viewContext.delete(book)
                         presentationMode.wrappedValue.dismiss()
                     }) {
-                        Text("Cancel")
+                        Image(systemName: "trash")
                             .foregroundColor(.white)
-                            .padding(.horizontal)
-                            .padding(.vertical, 8)
+                            .padding(8)
                             .background(Color.red)
-                            .cornerRadius(10)
+                            .cornerRadius(8)
+                    }
+                    .padding(.top, 16)
+                    .padding(.trailing, 16)
+                }
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(book.name)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    if let author = book.author {
+                        Text("by \(author)")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("Author: N/A")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                     
-                    Spacer()
-                    
-                    Button(action: {
-                        book.rating = Double(rating)
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Done")
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
-                            .padding(.vertical, 8)
-                            .background(Color.green)
-                            .cornerRadius(10)
+                    if let link = book.link, let url = URL(string: link) {
+                        Link(destination: url) {
+                            Text("Learn more")
+                                .font(.headline)
+                                .foregroundColor(.accentColor)
+                        }
+                    } else {
+                        Text("Link: N/A")
+                            .font(.headline)
+                            .foregroundColor(.accentColor)
                     }
+                    
+                    RatingView(rating: $rating)
+                        .onChange(of: rating) { newValue in
+                            book.rating = Double(newValue)
+                        }
                 }
                 .padding(.horizontal)
-                
-                if let imageUrl = book.imageUrl, let url = URL(string: imageUrl) {
-                    AsyncImage(url: url) { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 300)
-                                .cornerRadius(15)
-                        } else if phase.error != nil {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 300)
-                                .foregroundColor(.red)
-                        } else {
-                            ProgressView()
-                                .frame(height: 300)
-                        }
-                    }
-                } else {
-                    Image(systemName: "book.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 300)
-                        .foregroundColor(.purple)
-                }
-                
-                Text(book.name)
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                
-                if let author = book.author {
-                    Text("by \(author)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                } else {
-                    Text("Author: N/A")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                
-                if let link = book.link, let url = URL(string: link) {
-                    Link(destination: url) {
-                        Text("Learn more")
-                            .font(.headline)
-                            .foregroundColor(.blue)
-                            .padding()
-                            .background(Color.blue.opacity(0.2))
-                            .cornerRadius(10)
-                    }
-                } else {
-                    Text("Link: N/A")
-                        .font(.headline)
-                        .foregroundColor(.blue)
-                        .padding()
-                        .background(Color.blue.opacity(0.2))
-                        .cornerRadius(10)
-                }
-                
-                RatingView(rating: $rating)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Notes")
@@ -241,8 +251,9 @@ struct BookDetailsView: View {
                         set: { book.notes = $0 }
                     ))
                     .frame(height: 150)
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color("CellBackgroundColor"))
                     .cornerRadius(10)
+                    .padding(.horizontal)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray.opacity(0.2), lineWidth: 1)
@@ -268,8 +279,9 @@ struct BookDetailsView: View {
                         set: { book.favoriteQuotes = $0 }
                     ))
                     .frame(height: 150)
-                    .background(Color(UIColor.secondarySystemBackground))
+                    .background(Color("CellBackgroundColor"))
                     .cornerRadius(10)
+                    .padding(.horizontal)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray.opacity(0.2), lineWidth: 1)
@@ -289,9 +301,7 @@ struct BookDetailsView: View {
             }
             .padding()
         }
-        .background(LinearGradient(gradient: Gradient(colors: [Color.purple.opacity(0.3), Color.blue.opacity(0.3)]), startPoint: .topLeading, endPoint: .bottomTrailing))
-        .cornerRadius(20)
-        .padding()
+        .background(Color("BackgroundColor").ignoresSafeArea())
     }
 }
 

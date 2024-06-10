@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C5EAB372C173360006292CF /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5EAB362C173360006292CF /* RevenueCat */; };
+		2C5EAB392C173360006292CF /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2C5EAB382C173360006292CF /* RevenueCatUI */; };
 		2CA0560B2C0618DA000579B6 /* BookyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0560A2C0618DA000579B6 /* BookyApp.swift */; };
 		2CA0560D2C0618DA000579B6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA0560C2C0618DA000579B6 /* ContentView.swift */; };
 		2CA0560F2C0618DB000579B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CA0560E2C0618DB000579B6 /* Assets.xcassets */; };
@@ -40,6 +42,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C5EAB392C173360006292CF /* RevenueCatUI in Frameworks */,
+				2C5EAB372C173360006292CF /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +108,10 @@
 			dependencies = (
 			);
 			name = Booky;
+			packageProductDependencies = (
+				2C5EAB362C173360006292CF /* RevenueCat */,
+				2C5EAB382C173360006292CF /* RevenueCatUI */,
+			);
 			productName = Booky;
 			productReference = 2CA056072C0618DA000579B6 /* Booky.app */;
 			productType = "com.apple.product-type.application";
@@ -132,6 +140,9 @@
 				Base,
 			);
 			mainGroup = 2CA055FE2C0618DA000579B6;
+			packageReferences = (
+				2C5EAB352C173360006292CF /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+			);
 			productRefGroup = 2CA056082C0618DA000579B6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -372,6 +383,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2C5EAB352C173360006292CF /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.43.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2C5EAB362C173360006292CF /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C5EAB352C173360006292CF /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		2C5EAB382C173360006292CF /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C5EAB352C173360006292CF /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2CA055FF2C0618DA000579B6 /* Project object */;
 }
